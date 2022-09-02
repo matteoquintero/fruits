@@ -1,23 +1,23 @@
 <template>
     <div class="bg-fruit-100 min-w-screen min-h-screen flex justify-center items-start">
       <div class="max-w-xs relative space-y-3">
-        <Menu as="div" class="relative inline-block text-left w-full">
+        <Menu as="div" class="relative inline-block text-left w-56 pt-10 h-14">
             <div>
-                <MenuButton class="shadow-md inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <MenuButton class="shadow-lg inline-flex w-full h-14 items-center justify-between rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                     <span class="text-fruit-200">Select an item</span>
-                    <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                    <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5 " aria-hidden="true" />
                 </MenuButton>
             </div>
 
             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="w-full absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="py-1">
-                        <small class="text-center block">Showing {{ filterFruits.length}} of {{ fruits.length }} results</small>
                         <input
                             type="text"
                             id="search"
                             placeholder="This is a search input"
                             class="p-3 mb-0.5 w-full border-gray-300 rounded"
+                            autocomplete="off"
                             @input="searchFruits"
                         >
                         <MenuItem v-if="filterFruits.length == 0" v-slot="{ active }" v-for="fruit in startFruits" @click="selectFruit(fruit.name)">
@@ -26,14 +26,15 @@
 
                         <MenuItem v-if="filterFruits.length > 0" v-slot="{ active }" v-for="fruit in filterFruits" @click="selectFruit(fruit.name)">
                             <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">{{ fruit.name }}</a>
-                        </MenuItem>                        
+                        </MenuItem>
+                        <small v-if="filterFruits.length > 0" class="text-center block text-fruit-200">Showing {{ filterFruits.length}} of {{ fruits.length }} results</small>
                     </div>
                 </MenuItems>
             </transition>
         </Menu>
         <p
           v-if="selectedFruit"
-          class="text-lg pt-2 absolute"
+          class="pt-2 absolute text-fruit-200 w-full flex justify-center items-center "
         >
           You have selected: <span class="font-semibold">{{ selectedFruit }}</span>
         </p>
