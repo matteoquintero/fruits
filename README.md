@@ -1,7 +1,6 @@
 # fruits
 
-Se implementa algunos principios de SOLID en base al tiempo que me fue otorgado, el dropdown se hizo desde cero segun lo indicado en la prueba algunos archivos son reutilizables
-
+Se implementa algunos principios de SOLID basándonos en el tiempo que me fue otorgado, el dropdown se hizo desde cero y reutilizable, según lo indicado en la prueba, la mayoría de los archivos son reutilizables
 
 ## Project Setup
 
