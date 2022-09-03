@@ -18,25 +18,25 @@
                             placeholder="This is a search input"
                             class="p-3 mb-0.5 w-full border-gray-300 rounded"
                             autocomplete="off"
-                            @input="searchFruits"
+                            @input="searchList"
                         >
-                        <MenuItem v-if="filterFruits.length == 0" v-slot="{ active }" v-for="fruit in startFruits" @click="selectFruit(fruit.name)">
-                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">{{ fruit.name }}</a>
+                        <MenuItem v-if="filterList.length == 0" v-slot="{ active }" v-for="list in lists.slice(0, 10)" @click="selectList(list.name)">
+                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">{{ list.name }}</a>
                         </MenuItem>
 
-                        <MenuItem v-if="filterFruits.length > 0" v-slot="{ active }" v-for="fruit in filterFruits" @click="selectFruit(fruit.name)">
-                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">{{ fruit.name }}</a>
+                        <MenuItem v-if="filterList.length > 0" v-slot="{ active }" v-for="list in filterList" @click="selectList(list.name)">
+                            <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">{{ list.name }}</a>
                         </MenuItem>
-                        <small v-if="filterFruits.length > 0" class="text-center block text-fruit-200">Showing {{ filterFruits.length}} of {{ fruits.length }} results</small>
+                        <small v-if="filterList.length > 0" class="text-center block text-fruit-200">Showing {{ filterList.length}} of {{ lists.length }} results</small>
                     </div>
                 </MenuItems>
             </transition>
         </Menu>
         <p
-          v-if="selectedFruit"
+          v-if="selectedList"
           class="pt-2 absolute text-fruit-200 w-full flex justify-center items-center "
         >
-          You have selected: <span class="font-semibold">{{ selectedFruit }}</span>
+          You have selected: <span class="font-semibold">{{ selectedList }}</span>
         </p>
       </div>
     </div>
@@ -44,62 +44,38 @@
 <script lang="ts" setup>
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
     import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+    defineProps<{
+        lists: List[]
+    }>()    
 </script>
 <script lang="ts" >
-    import type Fruit from "@/interfaces/fruit.interface";
-    import type ResponseData from "@/interfaces/response-data.interface";
-    import Fruitservice from "@/services/fruit.service";
     import { defineComponent } from "vue";
+    import type List from '@/interfaces/list.interface';
 
     export default defineComponent({
     data() {
         return {
-            fruits: [] as Fruit[],
-            filterFruits: [] as Fruit[],
-            startFruits: [] as Fruit[],
-            selectedFruit: ''
+            filterList: [] as List[],
+            selectedList: ''
         };
     },
     methods: {
-        cleanFruits(){
-            this.fruits = []
-        },
-        selectFruit(fruit:string){
-            this.selectedFruit = fruit
+        selectList(list:string){
+            this.selectedList = list
         },        
-        searchFruits(e:any){
+        searchList(e:any){
             if (e.target.value === '') {
-                this.filterFruits = []
+                this.filterList = []
                 return
             }
             let matches = 0
-            this.filterFruits = this.fruits.filter(fruit => {
-                if (fruit.name.toLowerCase().includes(e.target.value.toLowerCase()) && matches < 10) {
+            this.filterList = this.lists.filter(list => {
+                if (list.name.toLowerCase().includes(e.target.value.toLowerCase()) && matches < 10) {
                     matches++
-                    return fruit
+                    return list
                 }
             })
-    
-
-        },              
-        loadFruits() {
-            Fruitservice.get()
-            .then((response: ResponseData) => {
-                this.fruits = response.data.data.fruits.map((currentValue: any, index: any) => {
-                    return {
-                        id: index,
-                        name: currentValue,
-                    };
-                });
-                this.startFruits = this.fruits.slice(0, 10);
-            })
-            .catch((e: Error) => {
-                console.log(e);
-            });
-        },
-    },
-    mounted() {
-        this.loadFruits();
+        }
     },
     });
 </script>

@@ -1,4 +1,4 @@
-export default interface Fruit {
+export default interface List {
     id: number,
     name: string
 }
